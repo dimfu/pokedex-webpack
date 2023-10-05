@@ -17,6 +17,21 @@ class Navbar extends HTMLElement {
   }
 
   async handleSearch(event) {
+    const row = $('#row');
+    row.empty();
+
+    const skeletons = Array.from({ length: 6 });
+
+    for (let i = 0; i < skeletons.length; i++) {
+      const card = $('<div class="card col-sm-12 col-md-6 col-lg-4 d-flex align-items-center justify-content-center" style="padding: 0; height: 400px;"></div>');
+      const skeletonImage = $('<div class="skeleton" style="padding:14px; width: 90%; height: 90%; border-radius: 14px;"></div>');
+      const cardBody = $('<div class="" style="margin: 0 auto;"></div>');
+      const titleSkeleton = $('<div class=\'skeleton card-title skeleton-text\'></div>');
+      row.append(card);
+      card.append(skeletonImage);
+      card.append(cardBody);
+      cardBody.append(titleSkeleton);
+    }
     event.preventDefault();
 
     const searchInput = this.shadowDOM.querySelector('#search');
@@ -24,7 +39,7 @@ class Navbar extends HTMLElement {
 
     if (searchTerm) {
       try {
-        const pokemon = await this.PokeApi.getPokemon(searchTerm);
+        const pokemon = await this.PokeApi.getPokemon(searchTerm.toLowerCase());
         this.displayPokemonResult(pokemon);
       } catch {
         this.displayPokemonResult(null);
